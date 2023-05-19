@@ -15,9 +15,8 @@ import (
 	"time"
 )
 
-
-----  这是冲突1
-
+// ----  这是冲突1
+// 这是冲突 2
 
 // 登录函数
 func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
