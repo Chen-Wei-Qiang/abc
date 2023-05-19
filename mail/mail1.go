@@ -8,12 +8,16 @@ import (
 	id "github.com/emersion/go-imap-id"
 	"github.com/emersion/go-imap/client"
 	_ "github.com/emersion/go-message/charset"
-	"github.com/emersion/go-message/mail"
 	"io"
 	"io/ioutil"
 	"net"
+	"strings"
 	"time"
 )
+
+
+----  这是冲突1
+
 
 // 登录函数
 func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
@@ -31,36 +35,6 @@ func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
 		return nil, err
 	}
 	return c, nil
-}
-
-func parseEmail(mr *mail.Reader) (body []byte, fileMap map[string][]byte) {
-	for {
-		p, err := mr.NextPart()
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			break
-		}
-		if p != nil {
-			switch h := p.Header.(type) {
-			case *mail.InlineHeader:
-				body, err = ioutil.ReadAll(p.Body)
-				if err != nil {
-					fmt.Println("read body err:", err.Error())
-				}
-
-			case *mail.AttachmentHeader:
-				fileName, _ := h.Filename()
-				fileContent, _ := ioutil.ReadAll(p.Body)
-				fileMap[fileName] = fileContent
-			}
-		}
-	}
-	return
-}
-
-func main() {
-	emailListByUid("imap.qq.com:993", "1790040642@qq.com", "nnmietnbqrvpcjib")
 }
 
 // ConvertToString 将字符串转为utf-8编码
@@ -146,7 +120,7 @@ func emailListByUid(Eserver, UserName, Password string) (err error) {
 
 		// 选择收取邮件的时间段
 		criteria := imap.NewSearchCriteria()
-		// 收取7天之内的邮件
+		// 收取7天之内的邮件-筛选7天内的通知
 		criteria.Since = time.Now().Add(-7 * time.Hour * 24)
 		// 按条件查询邮件
 		ids, err := c.UidSearch(criteria)
@@ -173,9 +147,25 @@ func emailListByUid(Eserver, UserName, Password string) (err error) {
 			//fmt.Println("Got text: %v\n", string(b))
 			//mr, _ := mail.CreateReader(r)
 			body1, _ := ParseBody(r)
-			fmt.Println("-----------------------------")
-			fmt.Println(string(body1))
-			fmt.Println("-----------------------------")
+			//fmt.Println("-----------------------------")
+			//fmt.Println(string(body1))
+			a1 := string(body1)
+			//fmt.Println("-----------------------------")
+
+			if strings.Contains(a1, "Changed paths") {
+
+				a_index := strings.Index(a1, "Changed paths")
+				b_index := strings.Index(a1, "Log Message")
+				new_string := a1[a_index:b_index]
+				fmt.Println(new_string)
+
+				//如果这个new_string新字符串中包含改变的文件，则实现监控通知
+				//if strings. {
+				//
+				//}
+				// fmt.Println(string(body1))
+			}
+
 			//if err != nil {
 			//	fmt.Println(err)
 			//	continue
@@ -191,4 +181,8 @@ func emailListByUid(Eserver, UserName, Password string) (err error) {
 		}
 	}
 	return
+}
+
+func main() {
+	emailListByUid("imap.qq.com:993", "1790040642@qq.com", "nnmietnbqrvpcjib")
 }
