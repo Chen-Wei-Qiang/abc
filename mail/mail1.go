@@ -16,9 +16,9 @@ import (
 )
 
 // ----  这是冲突1
-// 这是冲突 21242141
+// 这是冲突 21242141qwe
 
-// 登录函数
+// 登录函数123
 func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
 	dial := new(net.Dialer)
 	dial.Timeout = time.Duration(3) * time.Second
@@ -36,7 +36,7 @@ func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
 	return c, nil
 }
 
-// ConvertToString 将字符串转为utf-8编码
+// ConvertToString 将字符串转为utf-8编码1234
 func ConvertToString(src string, srcCode string, tagCode string) string {
 	srcCoder := mahonia.NewDecoder(srcCode)
 	srcResult := srcCoder.ConvertString(src)
