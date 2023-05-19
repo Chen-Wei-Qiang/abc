@@ -17,7 +17,9 @@ import (
 
 // ----  这是冲突1
 // 这是冲突 21242141qwe
+// 这是冲突 214
 
+// 登录函数456
 // 登录函数123
 func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
 	dial := new(net.Dialer)
@@ -36,6 +38,7 @@ func loginEmail(Eserver, UserName, Password string) (*client.Client, error) {
 	return c, nil
 }
 
+// ConvertToString 将字符串转为utf-8编码456
 // ConvertToString 将字符串转为utf-8编码1234
 func ConvertToString(src string, srcCode string, tagCode string) string {
 	srcCoder := mahonia.NewDecoder(srcCode)
